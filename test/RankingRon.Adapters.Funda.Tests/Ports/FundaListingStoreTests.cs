@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -61,9 +58,9 @@ public class FundaListingStoreTests
                 };
                 return response;
             });
-        
+
         var result = await _sut.GetAllMakelaars(searchCriteria);
-        
+
         result.Should().BeEmpty();
         _httpMessageHandlerMock.Protected().Verify(
             "SendAsync",

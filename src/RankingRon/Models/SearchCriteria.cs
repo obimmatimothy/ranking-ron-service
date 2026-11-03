@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RankingRon.Enums;
+﻿using RankingRon.Enums;
 
 namespace RankingRon.Models;
 

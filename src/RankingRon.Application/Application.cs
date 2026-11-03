@@ -11,17 +11,17 @@ internal sealed class Application(IMakelaarUseCase makelaarUseCase, ILogger<Appl
     private static readonly Dictionary<string, SearchCriteria> Rankings =
         new()
         {
-            { 
+            {
                 "Top 10 makelaars in Amsterdam",
                 new SearchCriteria { City = "Amsterdam", ListingType = ListingType.Koop } },
-            { 
+            {
                 "Top 10 makelaars in Amsterdam (with tuin)",
                 new SearchCriteria { City = "Amsterdam", ListingType = ListingType.Koop, AdditionalFilters = [ "tuin" ] } }
         };
 
     private readonly IMakelaarUseCase _makelaarUseCase = makelaarUseCase ?? throw new ArgumentNullException(nameof(makelaarUseCase));
     private readonly ILogger<Application> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    
+
     public async Task Run()
     {
         foreach (var (title, criteria) in Rankings)

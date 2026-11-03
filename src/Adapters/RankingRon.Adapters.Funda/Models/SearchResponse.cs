@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RankingRon.Adapters.Funda.Models;
+﻿namespace RankingRon.Adapters.Funda.Models;
 
 internal sealed class SearchResponse
 {
