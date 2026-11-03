@@ -24,14 +24,26 @@ public static class Bootstrapper
         services.AddSingleton(rateLimiter);
         services.AddTransient<RateLimitingHandler>();
 
-        services
+        var httpClientBuilder = services
             .AddHttpClient<IListingStore, FundaListingStore>()
             .ConfigureHttpClient(client =>
             {
                 client.BaseAddress = new Uri(fundaSettings.ApiUrl);
                 client.Timeout = TimeSpan.FromMilliseconds(fundaSettings.TimeoutInMilliseconds);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("RankingRon/1.0");
+                client.DefaultRequestHeaders.Accept.ParseAdd("*/*");
+                client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate, br");
+                client.DefaultRequestHeaders.Connection.Add("keep-alive");
             })
-            .AddHttpMessageHandler<RateLimitingHandler>()
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer(),
+                AllowAutoRedirect = true,
+                AutomaticDecompression = DecompressionMethods.All
+            });
+
+        httpClientBuilder
             .AddResilienceHandler("funda", (builder, context) => builder.AddRetry(new HttpRetryStrategyOptions
             {
                 OnRetry = args =>
@@ -54,6 +66,8 @@ public static class Bootstrapper
                     HttpClientResiliencePredicates.IsTransient(args.Outcome) ||
                     args.Outcome.Result?.StatusCode == HttpStatusCode.Unauthorized) // Funda api returned 401 when I tried to hit the limit
             }));
+
+        httpClientBuilder.AddHttpMessageHandler<RateLimitingHandler>();
 
         return services;
     }
