@@ -2,8 +2,8 @@
 
 RankingRon is a .NET 10 console application that ranks makelaars (real estate agents) by the number of properties they have listed for sale on [funda.nl](https://www.funda.nl). It produces two tables:
 
-1. Top 10 makelaars in Amsterdam: all listings for sale (`type=koop`, `zo=/amsterdam`)
-2. Top 10 makelaars in Amsterdam for listings with a garden (`type=koop`, `zo=/amsterdam/tuin`)
+1. Top 10 makelaars in Amsterdam: all listings for sale
+2. Top 10 makelaars in Amsterdam for listings with a garden
 
 ## Contents
 
@@ -108,7 +108,7 @@ Benefits:
 1. `Application` loops over the configured rankings. Each ranking is described by a `SearchCriteria` (`City`, `ListingType`, and optional `AdditionalFilters` such as `tuin`).
 2. `MakelaarUseCase.GetTopMakelaars` asks the `IListingStore` port for all listing/makelaar pairs that match the criteria.
 3. `FundaListingStore` converts the criteria into a Funda query:
-   - `type` is the lowercase `ListingType` (`koop`).
+   - `type` is the lowercase `ListingType` (`koop/huur`).
    - `zo` is `/{city}/{filter1}/...`, for example `/amsterdam/tuin`.
    - It calls the JSON endpoint: `/feeds/Aanbod.svc/json/{key}/?type=...&zo=...&page=N&pagesize=100`.
    - It reads `Paging.AantalPaginas` (total pages) from each response and continues until every page has been fetched.
